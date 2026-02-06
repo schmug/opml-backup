@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>Don't Hype Me RSS Feeds</title>
+  </head>
+  <body>
+    <outline type="rss" text="Geoffrey Huntley" xmlUrl="https://ghuntley.com/rss/" />
+    <outline text="Tech">
+      <outline type="rss" text="&quot;anthropic&quot; - Google News" xmlUrl="https://news.google.com/rss/search?q=anthropic" />
+      <outline type="rss" text="2600 - 2600: The Hacker Quarterly" xmlUrl="http://www.2600.com/rss.xml" />
+      <outline type="rss" text="AI" xmlUrl="https://blog.google/technology/ai/rss/" />
+      <outline type="rss" text="Anthropic Engineering Blog" xmlUrl="https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_engineering.xml" />
+      <outline type="rss" text="Anthropic Frontier Red Team Blog" xmlUrl="https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_red.xml" />
+      <outline type="rss" text="Anthropic News" xmlUrl="https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml" />
+      <outline type="rss" text="Anthropic Research" xmlUrl="https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_research.xml" />
+      <outline type="rss" text="Ars Technica - All content" xmlUrl="https://feeds.arstechnica.com/arstechnica/index" />
+      <outline type="rss" text="Articles - ~this week in security~" xmlUrl="https://this.weekinsecurity.com/articles/rss/" />
+      <outline type="rss" text="Cyberpunk Librarian" xmlUrl="https://cyberpunklibrarian.com/feed/" />
+      <outline type="rss" text="Dan Shapiro&apos;s Blog" xmlUrl="https://www.danshapiro.com/blog/feed/" />
+      <outline type="rss" text="darkreading" xmlUrl="https://www.darkreading.com/rss.xml" />
+      <outline type="rss" text="DataBreaches.Net" xmlUrl="https://databreaches.net/feed/" />
+      <outline type="rss" text="Dries Buytaert" xmlUrl="https://dri.es/rss.xml" />
+      <outline type="rss" text="Hacker News" xmlUrl="https://news.ycombinator.com/rss" />
+      <outline type="rss" text="Help Net Security" xmlUrl="https://www.helpnetsecurity.com/feed/" />
+      <outline type="rss" text="karpathy" xmlUrl="https://karpathy.bearblog.dev/rss/" />
+      <outline type="rss" text="MIT Technology Review" xmlUrl="https://www.technologyreview.com/feed/" />
+      <outline type="rss" text="Nate’s Substack" xmlUrl="https://natesnewsletter.substack.com/feed.xml" />
+      <outline type="rss" text="One Useful Thing" xmlUrl="https://www.oneusefulthing.org/feed" />
+      <outline type="rss" text="Phrack Magazine" xmlUrl="http://iosifache.me/feeds/phrack.xml" />
+      <outline type="rss" text="PogoWasRight.org" xmlUrl="https://pogowasright.org/feed/" />
+      <outline type="rss" text="Simon Willison&apos;s Weblog" xmlUrl="https://simonwillison.net/atom/everything/" />
+      <outline type="rss" text="So long and thanks for all the fish." xmlUrl="https://jordankasper.com/rss" />
+      <outline type="rss" text="TechCrunch" xmlUrl="https://techcrunch.com/feed/" />
+      <outline type="rss" text="Techlore" xmlUrl="https://techlore.tech/rss/" />
+      <outline type="rss" text="The DFIR Report" xmlUrl="https://thedfirreport.com/feed/" />
+      <outline type="rss" text="The Opt Out Project" xmlUrl="https://www.optoutproject.net/feed" />
+      <outline type="rss" text="The Verge" xmlUrl="https://www.theverge.com/rss/index.xml" />
+      <outline type="rss" text="WIRED" xmlUrl="Https://wired.com/feed/rss" />
+    </outline>
+    <outline text="YouTube">
+      <outline type="rss" text="404 Media" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC7YMZb0X_W06ToOazhFuXIQ" />
+      <outline type="rss" text="Anthropic" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCrDwWp7EBBv4NwvScIpBDOA" />
+      <outline type="rss" text="Benn Jordan" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCshObcm-nLhbu8MY50EZ5Ng" />
+      <outline type="rss" text="CHUPPL" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCizJl3TxBunh-LzpwyPYg0w" />
+      <outline type="rss" text="fern" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCODHrzPMGbNv67e84WDZhQQ" />
+      <outline type="rss" text="Jack Rhysider" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCMIqrmh2lMdzhlCPK5ahsAg" />
+      <outline type="rss" text="Kurzgesagt – In a Nutshell" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCsXVk37bltHxD1rDPwtNM8Q" />
+      <outline type="rss" text="Lauran Irion" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC2S4560XyLjhrj1P0e7s6zA" />
+      <outline type="rss" text="Manus AI" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCQgFQdqiFQ_LfFBGP6z9dqQ" />
+      <outline type="rss" text="MegaLag" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCwhB8cJTSLxyubnKSS-PLJg" />
+      <outline type="rss" text="OpenAI" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCXZCJLdBC09xxGZ6gcdrc6A" />
+      <outline type="rss" text="Reject Convenience" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC-ufRLYrXxrIEApGn9VG5pQ" />
+      <outline type="rss" text="TED" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCAuUUnT6oDeKwE6v1NGQxug" />
+      <outline type="rss" text="The Ezra Klein Show" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCnxuOd8obvLLtf5_-YKFbiQ" />
+      <outline type="rss" text="Theo - t3․gg" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCbRP3c757lWg9M-U7TyEkXA" />
+      <outline type="rss" text="Vox" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCLXo7UDZvByw2ixzpQCufnA" />
+    </outline>
+    <outline text="Reddit">
+      <outline type="rss" text="ashes to ashes, rust to rust" xmlUrl="https://old.reddit.com/r/iiiiiiitttttttttttt/.rss" />
+      <outline type="rss" text="cybersecurity" xmlUrl="https://old.reddit.com/r/cybersecurity/.rss" />
+      <outline type="rss" text="DepthHub: A jumping-off point for deeply-involved subreddits" xmlUrl="https://old.reddit.com/r/DepthHub/.rss" />
+      <outline type="rss" text="K-12 Systems Administrators" xmlUrl="https://old.reddit.com/r/k12sysadmin/.rss" />
+      <outline type="rss" text="People Who Ate The Onion" xmlUrl="https://old.reddit.com/r/AteTheOnion/.rss" />
+      <outline type="rss" text="Sysadmin" xmlUrl="https://old.reddit.com/r/sysadmin/.rss" />
+    </outline>
+    <outline text="News">
+      <outline type="rss" text="English - VICE" xmlUrl="https://www.vice.com/en/feed/?locale=en_us" />
+      <outline type="rss" text="NCGA Joint Legislative Oversight Committee on Information Technology Documents" xmlUrl="https://www.ncleg.gov/Documents/RSS/4/" />
+      <outline type="rss" text="ProPublica" xmlUrl="https://www.propublica.org/feeds/propublica/main" />
+      <outline type="rss" text="TheHill.com Just In" xmlUrl="https://thehill.com/homenews/feed/" />
+      <outline type="rss" text="Top stories - Google News" xmlUrl="https://news.google.com/rss" />
+      <outline type="rss" text="Vox" xmlUrl="https://vox.com/rss/index.xml" />
+    </outline>
+  </body>
+</opml>
