@@ -277,6 +277,135 @@
       white-space: nowrap;
     }
 
+    /* Selection UI */
+    .feed-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      background: var(--surface);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 4px;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .feed-checkbox:hover { border-color: var(--accent); }
+
+    .feed-checkbox:checked {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .feed-checkbox:checked::after {
+      content: "\2713";
+      position: absolute;
+      top: -1px;
+      left: 2px;
+      font-size: 13px;
+      color: #000;
+      font-weight: 700;
+    }
+
+    .category-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-radius: 3px;
+      background: var(--surface);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .category-checkbox:hover { border-color: var(--accent); }
+
+    .category-checkbox:checked {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .category-checkbox:checked::after {
+      content: "\2713";
+      position: absolute;
+      top: -2px;
+      left: 1px;
+      font-size: 11px;
+      color: #000;
+      font-weight: 700;
+    }
+
+    .category-checkbox.indeterminate {
+      border-color: var(--accent);
+    }
+
+    .category-checkbox.indeterminate::after {
+      content: "\2014";
+      position: absolute;
+      top: -3px;
+      left: 1px;
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .export-bar {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .export-bar.hidden { display: none; }
+
+    .selection-count {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .selection-count strong {
+      color: var(--accent);
+    }
+
+    .export-btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #000;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .export-btn:hover { background: #d97706; border-color: #d97706; }
+    .export-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .select-all-btn {
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .select-all-btn:hover { border-color: var(--accent); color: var(--text); }
+
     .no-results {
       text-align: center;
       padding: 3rem 1rem;
@@ -311,7 +440,7 @@
 <body>
   <header>
     <h1><span>Don't Hype Me</span> &mdash; RSS Feed Explorer</h1>
-    <p>A curated collection of RSS feeds spanning tech, security, AI research, YouTube channels, Reddit communities, and news outlets.</p>
+    <p>Search, filter, and select RSS feeds to create a custom OPML export. A curated collection spanning tech, security, AI research, YouTube channels, Reddit communities, and news outlets.</p>
     <div class="stats" id="stats"></div>
   </header>
   <div class="controls">
@@ -319,6 +448,12 @@
       <input type="text" id="search" placeholder="Filter feeds..." autocomplete="off" />
     </div>
     <button class="filter-btn active" data-filter="all">All</button>
+  </div>
+  <div class="export-bar hidden" id="exportBar">
+    <button class="select-all-btn" id="selectAllBtn">Select All</button>
+    <button class="select-all-btn" id="clearAllBtn">Clear All</button>
+    <span class="selection-count" id="selectionCount"><strong>0</strong> feeds selected</span>
+    <button class="export-btn" id="exportBtn" disabled>Export OPML</button>
   </div>
   <main id="main"></main>
   <footer>
@@ -575,6 +710,33 @@ function escapeHtml(str) {
   return el.innerHTML;
 }
 
+// ── Selection state ───────────────────────────────────────────────────
+const selectedFeeds = new Set(); // stores "category|||feedName|||feedUrl" keys
+
+function feedKey(catName, feedName, feedUrl) {
+  return `${catName}|||${feedName}|||${feedUrl}`;
+}
+
+function updateSelectionUI() {
+  const bar = document.getElementById("exportBar");
+  const count = document.getElementById("selectionCount");
+  const btn = document.getElementById("exportBtn");
+  const n = selectedFeeds.size;
+  bar.classList.toggle("hidden", false);
+  count.innerHTML = `<strong>${n}</strong> feed${n !== 1 ? "s" : ""} selected`;
+  btn.disabled = n === 0;
+}
+
+function updateCategoryCheckbox(catEl) {
+  const cb = catEl.querySelector(".category-checkbox");
+  if (!cb) return;
+  const feedCbs = catEl.querySelectorAll(".feed-checkbox");
+  const total = feedCbs.length;
+  const checked = Array.from(feedCbs).filter(c => c.checked).length;
+  cb.checked = checked === total && total > 0;
+  cb.classList.toggle("indeterminate", checked > 0 && checked < total);
+}
+
 function render(categories, filter, query) {
   const main = document.getElementById("main");
   let html = "";
@@ -595,11 +757,12 @@ function render(categories, filter, query) {
 
     const annotation = categoryAnnotations[cat.name] || "";
     html += `<div class="category" data-cat="${escapeHtml(cat.name)}">`;
-    html += `<div class="category-header" onclick="this.parentElement.classList.toggle('collapsed')">`;
-    html += `<span class="chevron">&#9660;</span>`;
-    html += `<span class="category-tag ${tagClass(cat.name)}">${escapeHtml(cat.name)}</span>`;
-    html += `<span class="category-name">${escapeHtml(cat.name)}</span>`;
-    html += `<span class="category-count">${matchingFeeds.length} feed${matchingFeeds.length !== 1 ? "s" : ""}</span>`;
+    html += `<div class="category-header">`;
+    html += `<input type="checkbox" class="category-checkbox" data-cat-name="${escapeHtml(cat.name)}" />`;
+    html += `<span class="chevron" onclick="this.closest('.category').classList.toggle('collapsed')">&#9660;</span>`;
+    html += `<span class="category-tag ${tagClass(cat.name)}" onclick="this.closest('.category').classList.toggle('collapsed')">${escapeHtml(cat.name)}</span>`;
+    html += `<span class="category-name" onclick="this.closest('.category').classList.toggle('collapsed')">${escapeHtml(cat.name)}</span>`;
+    html += `<span class="category-count" onclick="this.closest('.category').classList.toggle('collapsed')">${matchingFeeds.length} feed${matchingFeeds.length !== 1 ? "s" : ""}</span>`;
     html += `</div>`;
     if (annotation) {
       html += `<div class="category-annotation">${escapeHtml(annotation)}</div>`;
@@ -610,7 +773,10 @@ function render(categories, filter, query) {
       const fav = faviconUrl(feed.url);
       const ann = feedAnnotations[feed.name] || "";
       const badges = feedBadges[feed.name] || [];
+      const key = feedKey(cat.name, feed.name, feed.url);
+      const checked = selectedFeeds.has(key) ? "checked" : "";
       html += `<li class="feed-item">`;
+      html += `<input type="checkbox" class="feed-checkbox" data-cat="${escapeHtml(cat.name)}" data-name="${escapeHtml(feed.name)}" data-url="${escapeHtml(feed.url)}" ${checked} />`;
       html += `<div class="feed-icon">${fav ? `<img src="${fav}" alt="" loading="lazy" onerror="this.parentElement.textContent='&#128225;'">` : "&#128225;"}</div>`;
       html += `<div class="feed-info">`;
       html += `<div class="feed-name">${escapeHtml(feed.name)}</div>`;
@@ -633,6 +799,34 @@ function render(categories, filter, query) {
   }
 
   main.innerHTML = html;
+
+  // Attach checkbox events
+  main.querySelectorAll(".feed-checkbox").forEach(cb => {
+    cb.addEventListener("change", () => {
+      const key = feedKey(cb.dataset.cat, cb.dataset.name, cb.dataset.url);
+      if (cb.checked) selectedFeeds.add(key); else selectedFeeds.delete(key);
+      updateCategoryCheckbox(cb.closest(".category"));
+      updateSelectionUI();
+    });
+  });
+
+  main.querySelectorAll(".category-checkbox").forEach(cb => {
+    cb.addEventListener("change", () => {
+      const catEl = cb.closest(".category");
+      const feedCbs = catEl.querySelectorAll(".feed-checkbox");
+      feedCbs.forEach(fcb => {
+        fcb.checked = cb.checked;
+        const key = feedKey(fcb.dataset.cat, fcb.dataset.name, fcb.dataset.url);
+        if (cb.checked) selectedFeeds.add(key); else selectedFeeds.delete(key);
+      });
+      cb.classList.remove("indeterminate");
+      updateSelectionUI();
+    });
+  });
+
+  // Restore category checkbox states
+  main.querySelectorAll(".category").forEach(updateCategoryCheckbox);
+  updateSelectionUI();
 }
 
 function renderStats(categories, totalFeeds) {
@@ -675,7 +869,77 @@ function init() {
     render(categories, activeFilter, currentQuery);
   });
 
+  // Select All / Clear All
+  document.getElementById("selectAllBtn").addEventListener("click", () => {
+    document.querySelectorAll(".feed-checkbox").forEach(cb => {
+      cb.checked = true;
+      const key = feedKey(cb.dataset.cat, cb.dataset.name, cb.dataset.url);
+      selectedFeeds.add(key);
+    });
+    document.querySelectorAll(".category").forEach(updateCategoryCheckbox);
+    updateSelectionUI();
+  });
+
+  document.getElementById("clearAllBtn").addEventListener("click", () => {
+    selectedFeeds.clear();
+    document.querySelectorAll(".feed-checkbox").forEach(cb => { cb.checked = false; });
+    document.querySelectorAll(".category").forEach(updateCategoryCheckbox);
+    updateSelectionUI();
+  });
+
+  // Export OPML
+  document.getElementById("exportBtn").addEventListener("click", () => {
+    if (selectedFeeds.size === 0) return;
+
+    // Group selected feeds by category
+    const grouped = {};
+    for (const key of selectedFeeds) {
+      const [cat, name, url] = key.split("|||");
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push({ name, url });
+    }
+
+    // Build OPML XML
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    xml += `<opml version="2.0">\n`;
+    xml += `  <head>\n    <title>Don't Hype Me - Custom Export</title>\n  </head>\n`;
+    xml += `  <body>\n`;
+
+    // Uncategorized feeds first (top-level)
+    if (grouped["Uncategorized"]) {
+      for (const f of grouped["Uncategorized"]) {
+        xml += `    <outline type="rss" text="${xmlEscape(f.name)}" xmlUrl="${xmlEscape(f.url)}" />\n`;
+      }
+      delete grouped["Uncategorized"];
+    }
+
+    // Category folders
+    for (const [catName, feeds] of Object.entries(grouped)) {
+      xml += `    <outline text="${xmlEscape(catName)}">\n`;
+      for (const f of feeds) {
+        xml += `      <outline type="rss" text="${xmlEscape(f.name)}" xmlUrl="${xmlEscape(f.url)}" />\n`;
+      }
+      xml += `    </outline>\n`;
+    }
+
+    xml += `  </body>\n</opml>`;
+
+    // Download
+    const blob = new Blob([xml], { type: "text/xml;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "donthypeme-custom-export.opml";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  });
+
   render(categories, activeFilter, currentQuery);
+}
+
+function xmlEscape(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 }
 
 init();
